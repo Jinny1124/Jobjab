@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JobInfo - JobJab</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Encode+Sans:wght@500;700;800&family=Carlito:wght@700&display=swap"
+      rel="stylesheet">
+    <link rel="stylesheet" href="../src/assets/styles/apply_user.css">
+</head>
+
+<body>
+    <div class="navbar">
+        <div class="nav-logo">JobJab</div>
+        <div class="nav-search">
+            <img src="../src/assets/Images/magnifying glass.png"/>
+            <input type="text" placeholder="ค้นหางาน...">
+        </div>
+
+        <div class="nav-user">
+            <img src="../src/assets/Images/person-circle.png"/>
+        </div>
+    </div>
+
+    <div class="job-card">
+        <div class="back-button" onclick="history.back()">&#10094;</div>
+        <div class="job-header">
+            <div class="job-image-container">
+                <img id="job-image" src="https://via.placeholder.com/160x100" alt="Job Image" class="job-image">
+            </div>
+            <div class="job-info">
+                <h2 id="job-name" class="job-title" style="font-size: 2.5rem;">Job Name</h2> <!-- Increased font size -->
+                <div id="job-details" class="job-details">
+                    <p>📍 Location</p>
+                    <p>⏰ Time</p>
+                    <p>💰 Price</p>
+                </div>
+            </div>
+        </div>
+
+        <hr /> <!-- เส้นคั่น -->
+
+        <!-- Moved description here -->
+        <div id="job-description" class="job-description">Description...</div>
+
+        <div class="job-tags" id="job-tags">
+            <!-- Tags will be dynamically added here -->
+        </div>
+    
+        <div class="apply-button">
+            <button>สมัครงาน</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const selectedJob = JSON.parse(localStorage.getItem("selectedJob") || "{}");
+            console.log("Selected Job in apply_user.html:", selectedJob);
+
+            if (!selectedJob || Object.keys(selectedJob).length === 0) {
+                alert("ไม่พบข้อมูลงาน กรุณากลับไปเลือกงานใหม่");
+                window.location.href = "../components/4inhomepage.html";
+                return;
+            }
+
+            // Display the job name
+            document.getElementById("job-name").textContent = selectedJob.jobname || "No Job Name";
+
+            // Move the job description to the description section
+            document.getElementById("job-description").textContent = selectedJob.job_description || "No Description";
+
+            // Handle the job image
+            const jobImageElement = document.getElementById("job-image");
+            if (selectedJob.image) {
+                jobImageElement.src = selectedJob.image;
+                jobImageElement.style.display = "block"; // Ensure the image is visible
+            } else {
+                jobImageElement.style.display = "none"; // Hide the image if not available
+            }
+
+            // Display additional job details with emojis
+            document.getElementById("job-details").innerHTML = `
+                <p>📍 ${selectedJob.location || "No Location"}</p>
+                <p>⏰ ${selectedJob.start_time || "No Start Time"} - ${selectedJob.end_time || "No End Time"}</p>
+                <p>📅 ${selectedJob.date || "No Date"}</p>
+                <p>💰 ${selectedJob.price || "No Price"} บาท</p>
+            `;
+
+            // Update the tags dynamically
+            const jobTagsElement = document.getElementById("job-tags");
+            jobTagsElement.innerHTML = ""; // Clear existing tags
+            if (selectedJob.tag) {
+                const tagElement = document.createElement("span");
+                tagElement.className = "tag";
+                tagElement.textContent = selectedJob.tag;
+                jobTagsElement.appendChild(tagElement);
+            } else {
+                jobTagsElement.textContent = "No Tags Available";
+            }
+        });
+
+        // สมัครงาน -> ไปหน้าถัดไป
+        document.addEventListener("click", function (e) {
+    if (e.target.closest(".apply-button button")) {
+        // ตรวจสอบข้อมูลผู้ใช้
+        const userData = JSON.parse(localStorage.getItem("employee-profile") || "{}");
+
+        if (!userData || Object.keys(userData).length === 0) {
+            alert("ไม่พบข้อมูลผู้ใช้ กรุณาสร้างบัญชีก่อนสมัครงาน");
+            return;
+        }
+
+        // ดึง selected job
+        let selectedJob = JSON.parse(localStorage.getItem("selectedJob") || "{}");
+
+        if (!selectedJob || Object.keys(selectedJob).length === 0) {
+            alert("ไม่พบข้อมูลงาน กรุณากลับไปเลือกงานใหม่");
+            return;
+        }
+
+        // ✅ เพิ่มข้อมูลจำเป็นลง selectedJob
+        selectedJob.id = selectedJob.id || String(Date.now()); // สร้าง ID หากยังไม่มี
+        selectedJob.status = "กำลังพิจารณา"; // สถานะเริ่มต้น
+        selectedJob.applicants = selectedJob.applicants || []; // เตรียม array สำหรับผู้สมัคร
+
+        // ✅ เก็บกลับลง localStorage
+        localStorage.setItem("selectedJob", JSON.stringify(selectedJob));
+
+        // ✅ เก็บลง appliedJobs (history)
+        const appliedJobs = JSON.parse(localStorage.getItem("appliedJobs") || "[]");
+
+        // ป้องกันการสมัครซ้ำ
+        const alreadyApplied = appliedJobs.find(job => job.id === selectedJob.id);
+        if (!alreadyApplied) {
+            appliedJobs.push(selectedJob);
+            localStorage.setItem("appliedJobs", JSON.stringify(appliedJobs));
+        }
+
+        // ✅ ไปหน้ากรอกใบสมัคร
+        window.location.href = "../components/work_regis.html";
+    }
+});
+
+        function viewJobDetail(index) {
+            // Retrieve the job list from localStorage
+            const jobs = JSON.parse(localStorage.getItem("jobList") || "[]");
+
+            // Get the selected job
+            const selectedJob = jobs[index];
+
+            // Save the selected job to localStorage
+            localStorage.setItem("selectedJob", JSON.stringify(selectedJob));
+
+            // Redirect to apply_user.html
+            window.location.href = "../components/apply_user.html";
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ProfileUser - JobJab</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Encode+Sans:wght@500;700;800&family=Carlito:wght@700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../src/assets/styles/profile_user.css">
+</head>
+
+<body>
+    <!-- NavBar -->
+    <div class="navbar">
+        <div class="nav-left">
+            <a href="../components/4inhomepage.html" class="back-arrow">&#10094;</a>
+            <div class="nav-logo">JobJab</div>
+        </div>
+        <div class="nav-user">
+            <img src="../src/assets/Images/person-circle.png" alt="User" />
+        </div>
+    </div>
+
+
+    <!-- Information Section -->
+    <section class="info-section">
+        <h1>Information</h1>
+        <div class="info-card">
+            <div class="personal-info" id="personal-info">
+                <p><strong>ข้อมูลส่วนบุคคล</strong></p>
+                <!-- เติมข้อมูลจาก JS -->
+            </div>
+            <div class="profile-info">
+                <img id="profile-pic" class="profile-pic" alt="Profile Picture">
+                <button class="edit-btn"
+                    onclick="window.location.href='../components/6accemplyee.html'">แก้ไขข้อมูล</button>
+                <!-- is there any way we could have exist info that we alraedy filled in this? -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Information Section -->
+    <section class="record-section">
+        <div class="record-container">
+            <h1>ประวัติการศึกษา:</h1>
+            <div class="record-block" id="edu-record"></div>
+
+            <h1>ประวัติการทำงาน:</h1>
+            <div class="record-block" id="work-record"></div>
+
+            <h1>ทักษะ:</h1>
+            <div class="record-block" id="skill-record"></div>
+        </div>
+    </section>
+
+    <!-- Applied History -->
+    <section class="apply-history-section">
+        <div class="apply-history-header">
+            <h1>รายการสมัคร</h1>
+            <input type="text" class="search-box" placeholder="ค้นหา...">
+        </div>
+
+        <div class="history-container">
+            <!-- Applied jobs will be dynamically added here -->
+        </div>
+    </section>
+
+    <script>
+        window.onload = function () {
+            const employeeProfile = JSON.parse(localStorage.getItem("employee-profile") || "{}");
+
+            // Default values
+            const defaultImage = "../src/assets/Images/person-circle.png";
+            const profileImage = employeeProfile.profile_image || defaultImage;
+            const fullName = employeeProfile.fullname || "ไม่ระบุชื่อ";
+            const phone = employeeProfile.phone || "ไม่ระบุเบอร์โทร";
+            const birthdate = employeeProfile.birthdate || "ไม่ระบุวันเกิด";
+            const idcard = employeeProfile.idcard || "ไม่ระบุเลขบัตรประชาชน";
+
+            // Update the profile picture
+            const profilePicElement = document.getElementById("profile-pic");
+            profilePicElement.src = profileImage;
+
+            // Update personal information
+            const personalInfoElement = document.getElementById("personal-info");
+            personalInfoElement.innerHTML = `
+                <p>ชื่อ: ${fullName}</p>
+                <p>เบอร์โทรศัพท์: ${phone}</p>
+                <p>วันเกิด: ${birthdate}</p>
+                <p>เลขบัตรประชาชน: ${idcard}</p>
+            `;
+
+            // Render applied jobs
+            renderAppliedJobs();
+        };
+
+        // ช่วยฟังก์ชันแสดงรายการ
+        function renderList(listId, containerId) {
+            const list = JSON.parse(localStorage.getItem(listId) || "[]");
+            const container = document.getElementById(containerId);
+            list.forEach(item => {
+                const div = document.createElement("div");
+                div.innerHTML = `
+              <p class="record-title">${item.title}</p>
+              ${item.desc ? `<p class="record-subtitle">${item.desc}</p>` : ""}
+              ${item.year ? `<div class="record-meta"><span>${item.year}</span><img src="/src/assets/Images/calendar_icon.png"/></div>` : ""}
+              <hr/>
+            `;
+                container.appendChild(div);
+            });
+        }
+
+        // แสดงข้อมูลจาก 7accemplyee2.html ช
+        renderList("edu-data", "edu-record");
+        renderList("work-data", "work-record");
+        renderList("skill-data", "skill-record");
+
+        //สมมุดต batabase คับ LINK WITH mySQL later
+        const jobApplications = [
+            {
+                id: "1",
+                name: "ผู้ช่วยงานวิจัย",
+                description: "ช่วยเก็บข้อมูลและวิเคราะห์เบื้องต้น",
+                tags: ["งานพาร์ตไทม์", "วิจัย"],
+                status: "พิจารณาแล้ว",
+                file: "../src/assets/Images/saipai.png"
+            },
+            {
+                id: "2",
+                name: "พนักงานสต๊อกสินค้า",
+                description: "ดูแลคลังสินค้า จัดของเข้าชั้น",
+                tags: ["งานพาร์ตไทม์", "โลจิสติกส์"],
+                status: "กำลังพิจารณา",
+                file: "../src/assets/Images/saipai.png"
+            },
+            {
+                id: "3",
+                name: "แอดมินดูแลเพจ",
+                description: "ตอบแชทและโพสต์คอนเทนต์",
+                tags: ["แอดมิน", "งานออนไลน์"],
+                status: "ไม่ผ่านพิจารณา",
+                file: "../src/assets/Images/akkharawoot.jpg"
+            }
+        ];
+
+        //สร้างการ์ดประวัติข้างล่าง
+        function renderJobCards() {
+            const container = document.querySelector(".history-container");
+            container.innerHTML = "";
+
+            jobApplications.forEach(job => {
+                const statusClass = {
+                    "พิจารณาแล้ว": "approved",
+                    "กำลังพิจารณา": "pending",
+                    "ไม่ผ่านพิจารณา": "failed"
+                }[job.status];
+
+                const card = document.createElement("div");
+                card.className = "job-card";
+                card.onclick = () => window.location.href = `../components/work_history_detail.html?id=${job.id}`;
+
+                card.innerHTML = `
+                    <div class="job-details">
+                        <h3>${job.name}</h3>
+                        <p class="job-description">${job.description}</p>
+                        <div class="tags">
+                            ${job.tags.map(tag => `<span class="tag">${tag}</span>`).join("")}
+                        </div>
+                    </div>
+                    <span class="status ${statusClass}">${job.status}</span>
+                    <div class="preview-pic"></div>
+                    <a href="${job.file}" class="view-btn" target="_blank">เอกสารที่อัปโหลด</a>
+                    <div class="image-container">
+                        <img id="jobImage" alt="Job Image" />
+                    </div>
+                `;
+                //จิงๆ น่าจะต้องเป็น  <a href="uploads/${job.file}" class="view-btn" target="_blank">เอกสารที่อัปโหลด</a>
+
+                //ป้องกันลิงก์ไม่ให้คลิกทะลุการ์ด
+                const link = card.querySelector("a.view-btn");
+                link.addEventListener("click", (event) => {
+                    event.stopPropagation();
+                });
+
+                container.appendChild(card);
+            });
+
+            // Retrieve the image from localStorage
+            const jobImage = localStorage.getItem("jobImage");
+
+            // Check if the image exists in localStorage
+            if (jobImage) {
+                // Set the image as the src of the <img> element
+                document.getElementById("jobImage").src = jobImage;
+            } else {
+                console.log("No image found in localStorage.");
+            }
+        }
+
+        function renderAppliedJobs() {
+            const appliedJobs = JSON.parse(localStorage.getItem("appliedJobs") || "[]");
+            const historyContainer = document.querySelector(".history-container");
+
+            // Clear existing job cards
+            historyContainer.innerHTML = "";
+
+            // Render each applied job
+            appliedJobs.forEach(job => {
+                const jobCard = document.createElement("div");
+                jobCard.className = "job-card";
+                jobCard.onclick = () => {
+                    // Redirect to work_history_detail.html with job ID as a query parameter
+                    window.location.href = `../components/work_history_detail.html?id=${job.id}`;
+                };
+
+                // Render job details
+                jobCard.innerHTML = `
+                    <div class="job-details">
+                        <h3>${job.jobname}</h3>
+                        <p class="job-description">${job.job_description}</p>
+                        <div class="tags">
+                            <span class="tag">${job.tag || "No Tag"}</span>
+                        </div>
+                    </div>
+                    <div class="applicants-status">
+                        ${job.applicants
+                            .map(
+                                applicant => `
+                            <div class="applicant">
+                                <span class="status ${
+                                    applicant.status === "พิจารณาแล้ว"
+                                        ? "approved"
+                                        : applicant.status === "กำลังพิจารณา"
+                                        ? "pending"
+                                        : "failed"
+                                }">${applicant.status}</span>
+                            </div>
+                        `
+                            )
+                            .join("")}
+                    </div>
+                    <div class="preview-pic">
+                        <img src="${job.image || '../src/assets/Images/default-job.png'}" alt="Job Image" class="job-image">
+                    </div>
+                    <a href="${job.file || '#'}" class="view-btn" target="_blank" rel="noopener noreferrer">เอกสารที่อัปโหลด</a>
+                `;
+
+                historyContainer.appendChild(jobCard);
+            });
+        }
+
+        function saveChanges() {
+            const appliedJobs = JSON.parse(localStorage.getItem("appliedJobs") || "[]");
+            const selectedJobId = "job-001"; // Replace with the actual selected job ID
+
+            // Find the selected job
+            const jobIndex = appliedJobs.findIndex(job => job.id === selectedJobId);
+            if (jobIndex !== -1) {
+                // Update the status of applicants in the selected job
+                appliedJobs[jobIndex].applicants = appliedJobs[jobIndex].applicants.map(applicant => ({
+                    ...applicant,
+                    status: statusChanges[applicant.id] || applicant.status, // Update status if it has changed
+                }));
+            }
+
+            // Save the updated appliedJobs array back to localStorage
+            localStorage.setItem("appliedJobs", JSON.stringify(appliedJobs));
+            alert("Changes saved successfully!");
+        }
+
+        renderJobCards();
+    </script>
+
+</body>
+
+</html> 

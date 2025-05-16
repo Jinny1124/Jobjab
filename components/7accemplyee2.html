@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>สร้างแอคเคาท์</title>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;600;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../src/assets/styles/7accemplyee2.css" />
+</head>
+<body>
+  <div class="container">
+    <div class="left-panel">
+      <div>
+        <h1>สร้าง<br />แอคเคาท์</h1>
+        <p>(ผู้สมัครงาน)</p>
+        <div class="steps">
+          <div class="step done">✓ ข้อมูลส่วนบุคคล</div>
+          <div class="step done">✓ โปรไฟล์</div>
+        </div>
+      </div>
+      <div class="logo">JobJab</div>
+    </div>
+
+    <div class="right-panel">
+      <a href="../components/4inhomepage.html" class="back-arrow">&#10094;</a>
+
+      <!--การศึกษา -->
+      <div class="section">
+        <div class="section-header">
+          <h2>ประวัติการศึกษา</h2>
+        </div>
+        <div class="input-group">
+          <input type="text" placeholder="ชื่อสถานศึกษา" id="edu-input" />
+          <input type="text" placeholder="รายละเอียดเพิ่มเติม" id="edu-desc" />
+          <input type="text" placeholder="ช่วงปี (เช่น 2560 - 2564)" id="edu-year" />
+        </div>
+        <button onclick="addItem('edu')">เพิ่ม</button>
+        <div class="list" id="edu-list"></div>
+      </div>
+
+      <div class="section">
+        <div class="section-header">
+          <h2>ประวัติการทำงาน</h2>
+        </div>
+        <div class="input-group">
+          <input type="text" placeholder="ชื่อตำแหน่ง" id="work-input" />
+          <input type="text" placeholder="รายละเอียดเพิ่มเติม" id="work-desc" />
+          <input type="text" placeholder="ช่วงปี (เช่น 2560 - 2564)" id="work-year" />
+        </div>
+        <button onclick="addItem('work')">เพิ่ม</button>
+        <div class="list" id="work-list"></div>
+      </div>
+
+      <!-- สทักษะ -->
+      <div class="section">
+        <div class="section-header">
+          <h2>ทักษะ</h2>
+        </div>
+        <div class="input-group">
+          <input type="text" placeholder="ชื่อทักษะ" id="skill-input" />
+          <input type="text" placeholder="รายละเอียดเพิ่มเติม" id="skill-desc" />
+        </div>
+        <button onclick="addItem('skill')">เพิ่ม</button>
+        <div class="list" id="skill-list"></div>
+      </div>
+
+      <button id="save-button" class="save-btn">บันทึกข้อมูล</button>
+    </div>
+  </div>
+
+  <script>
+    function addItem(type) {
+      const input = document.getElementById(`${type}-input`);
+      const desc = document.getElementById(`${type}-desc`);
+      const year = document.getElementById(`${type}-year`);
+      const list = document.getElementById(`${type}-list`);
+    
+      const title = input.value.trim();
+      const description = desc?.value.trim();
+      const yearRange = year?.value.trim();
+    
+      if (!title) return;
+    
+      // สร้างรายการใหม่
+      const newItem = { title, desc: description, year: yearRange };
+    
+      // อ่านรายการเดิมจาก local
+      const existing = JSON.parse(localStorage.getItem(`${type}-data`) || "[]");
+    
+      // เพิ่มใหม่และเซฟกลับ
+      existing.push(newItem);
+      localStorage.setItem(`${type}-data`, JSON.stringify(existing));
+    
+      const div = document.createElement("div");
+      div.className = "list-item";
+      div.innerHTML = `
+        <p><strong>${title}</strong></p>
+        ${description ? `<p>${description}</p>` : ""}
+        ${yearRange ? `<p>${yearRange}</p>` : ""}
+        <span class="remove-btn" onclick="removeItem(this, '${type}', ${existing.length - 1})">×</span>
+      `;
+      list.appendChild(div);
+    
+      // ล้าง input
+      input.value = "";
+      if (desc) desc.value = "";
+      if (year) year.value = "";
+      input.focus();
+    }
+    
+    // ลบรายการและอัปเดต localStorage
+    function removeItem(el, type, index) {
+      const parent = el.parentElement;
+      parent.remove();
+    
+      let data = JSON.parse(localStorage.getItem(`${type}-data`) || "[]");
+      data.splice(index, 1);
+      localStorage.setItem(`${type}-data`, JSON.stringify(data));
+    
+      //reload ทั้ง list ใหม่ก็ได้หากต้องการ sync ลำดับ index
+    }
+    
+    // 🎯 เพิ่มฟีเจอร์ Enter
+    ['edu', 'work', 'skill'].forEach(type => {
+      ['input', 'desc', 'year'].forEach(field => {
+        const el = document.getElementById(`${type}-${field}`);
+        if (el) {
+          el.addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+              e.preventDefault();
+              addItem(type);
+            }
+          });
+        }
+      });
+    });
+    
+    // โหลดข้อมูลจาก localStorage เมื่อเปิดหน้า
+    window.onload = function () {
+      ['edu', 'work', 'skill'].forEach(type => {
+        const list = document.getElementById(`${type}-list`);
+        const data = JSON.parse(localStorage.getItem(`${type}-data`) || "[]");
+        data.forEach((item, index) => {
+          const div = document.createElement("div");
+          div.className = "list-item";
+          div.innerHTML = `
+            <p><strong>${item.title}</strong></p>
+            ${item.desc ? `<p>${item.desc}</p>` : ""}
+            ${item.year ? `<p>${item.year}</p>` : ""}
+            <span class="remove-btn" onclick="removeItem(this, '${type}', ${index})">×</span>
+          `;
+          list.appendChild(div);
+        });
+      });
+    };
+    
+    document.getElementById("save-button").addEventListener("click", function () {
+      // Retrieve data from localStorage
+      const edu = JSON.parse(localStorage.getItem("edu-data") || "[]");
+      const work = JSON.parse(localStorage.getItem("work-data") || "[]");
+      const skill = JSON.parse(localStorage.getItem("skill-data") || "[]");
+      const employeeProfile = JSON.parse(localStorage.getItem("employee-profile") || "{}");
+    
+      // Check if all required sections have at least one entry
+      if (edu.length > 0 && work.length > 0 && skill.length > 0) {
+        // Combine all data into a single object
+        const completeProfile = {
+          ...employeeProfile, // Include data from 6accemplyee.html
+          education: edu,
+          workExperience: work,
+          skills: skill,
+        };
+    
+        // Save the complete profile back to localStorage
+        localStorage.setItem("employee-complete-profile", JSON.stringify(completeProfile));
+        localStorage.setItem("employee-completed", "true");
+    
+        // Redirect to profile_user.html
+        window.location.href = "../components/profile_user.html";
+      } else {
+        alert("กรุณากรอกข้อมูลอย่างน้อย 1 รายการในแต่ละประเภทก่อนบันทึก");
+      }
+    });
+    </script>
+    
+</body>
+</html>

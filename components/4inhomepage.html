@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Job Web Scroll Page</title>
+  <link rel="stylesheet" href="../src/assets/styles/1style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;600;800&display=swap" rel="stylesheet" />
+</head>
+
+<body>
+  <div class="topbar">
+    <div class="logo">JobJab</div>
+
+    <input type="text" class="search-box" placeholder="ค้นหา..." />
+
+    <div class="auth-buttons">
+      <div class="dropdown">
+        <button class="dropbtn">Status <span class="arrow">&#9662;</span></button>
+        <div class="dropdown-content">
+          <a href="#" onclick="goToEmployer()">ผู้จ้างงาน</a>
+          <a href="#" onclick="goToEmployee()">ผู้สมัครงาน</a>
+        </div>
+      </div>
+      <div class="icon">
+        <img id="icon-image" src="/src/assets/Images/Annonymous Image.png" alt="User Icon">
+      </div>
+    </div>
+  </div>
+
+  <section class="hero">
+    <div class="hero-container">
+      <div class="hero-image">
+        <img id="profile-picture" src="/src/assets/Images/Annonymous Image.png" alt="รูปโปรไฟล์">
+      </div>
+      <div class="hero-text">
+        <div class="greeting" id="greeting-text">สวัสดี!<br>คุณ JobJab</div>
+        <p>เริ่มต้นหางานที่ใช่กับเรา</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section1">
+    <div class="career-grid">
+      <a href="../components/IN_job_finder.html" class="grid-item featured">งานในมหาวิทยาลัย</a>
+      <a href="../components/emptyIN_job_finder.html" class="grid-item">งานยอดนิยม</a>
+      <a href="#" class="grid-item">การตลาด</a>
+      <a href="#" class="grid-item">โฆษณา</a>
+      <a href="#" class="grid-item">กราฟิก</a>
+      <a href="#" class="grid-item">ออกแบบ</a>
+      <a href="#" class="grid-item">เว็บไซต์</a>
+      <a href="#" class="grid-item">ตรวจบ้านคอนโด</a>
+      <a href="#" class="grid-item">ช่างไฟฟ้า</a>
+      <a href="#" class="grid-item">ช่างประปา</a>
+      <a href="#" class="grid-item">งานบริการ</a>
+      <a href="#" class="grid-item">งานพาร์ทไทม์</a>
+    </div>
+  </section>
+
+  <section class="section2">
+    <div class="stats-container">
+      <div class="stats-box">
+        <div class="stats-title">จำนวนตำแหน่งงานที่เปิดรับ</div>
+        <div class="stats-number">XX</div>
+        <div class="stats-unit">คน</div>
+      </div>
+      <div class="stats-box">
+        <div class="stats-title">จำนวนผู้สมัคร</div>
+        <div class="stats-number">XX</div>
+        <div class="stats-unit">คน</div>
+      </div>
+      <div class="stats-box">
+        <div class="stats-title">จำนวนบริษัทที่ลงทะเบียน</div>
+        <div class="stats-number">XX</div>
+        <div class="stats-unit">ที่</div>
+      </div>
+    </div>
+    <div class="footer">
+      © 2025 Thammasat University. All rights reserved.
+    </div>
+  </section>
+
+    <div style="text-align: center; margin: 40px auto; display: flex; justify-content: center;">
+      <button onclick="resetAccountStatus()" style="padding: 10px 20px; font-size: 1rem; background-color: #665F5F; color: white; border: none; border-radius: 8px; cursor: pointer;">
+        🔄 รีเซ็ตสถานะ (ล้างข้อมูลProfile)
+      </button>
+    </div>
+
+  <script>
+    // Default profile image
+    const defaultImage = "/src/assets/Images/Annonymous Image.png";
+
+    // Function to update the profile image and the greeting text
+    function updateProfile(imageData, fullName) {
+      document.getElementById('profile-picture').src = imageData;
+      document.getElementById('icon-image').src = imageData;
+      document.getElementById("greeting-text").innerHTML = fullName
+        ? `สวัสดี!<br>คุณ${fullName}`
+        : "สวัสดี!<br>คุณ JobJab";
+    }
+
+    // On page load, determine which profile to use
+    window.onload = function () {
+      const employerProfile = JSON.parse(localStorage.getItem("employer-profile") || "{}");
+      const employeeProfile = JSON.parse(localStorage.getItem("employee-profile") || "{}");
+
+      let profileImage = defaultImage;
+      let fullName = null;
+
+      if (employerProfile.full_name) {
+        // Use employer profile if available
+        profileImage = employerProfile.profile_image || defaultImage;
+        fullName = employerProfile.full_name;
+      } else if (employeeProfile.fullname) {
+        // Use employee profile if employer profile is not available
+        profileImage = employeeProfile.profile_image || defaultImage;
+        fullName = employeeProfile.fullname;
+      }
+
+      // Update the profile image and greeting text
+      updateProfile(profileImage, fullName);
+    };
+
+    // Event listener for profile image upload
+    const imageUpload = document.getElementById("imageUpload");
+    if (imageUpload) {
+      imageUpload.addEventListener("change", function () {
+        const file = this.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = function (e) {
+            const imageData = e.target.result;
+
+            // Update both the profile picture and the icon background
+            updateProfileImage(imageData);
+
+            // Save the updated profile image to localStorage
+            const savedProfile = JSON.parse(localStorage.getItem("employer-profile") || "{}");
+            savedProfile.profile_image = imageData;
+            localStorage.setItem("employer-profile", JSON.stringify(savedProfile));
+          };
+          reader.readAsDataURL(file);
+        }
+      });
+    }
+
+    // Navigate to employer account creation or profile
+    function goToEmployer() {
+      const completed = localStorage.getItem('employer-profile-created');
+      if (completed === 'true') {
+        window.location.href = '../components/profile_ent.html'; // Redirect to employer profile page
+      } else {
+        window.location.href = '../components/5accemployer.html'; // Redirect to employer profile creation page
+      }
+    }
+
+    // Navigate to employee account creation or profile
+    function goToEmployee() {
+      const completed = localStorage.getItem('employee-completed'); // Check if the profile is marked as completed
+      if (completed === 'true') {
+        // Redirect to employee profile page if data is complete
+        window.location.href = '../components/profile_user.html';
+      } else {
+        // Redirect to employee profile creation page if data is incomplete
+        window.location.href = '../components/6accemplyee.html';
+      }
+    }
+
+    // Reset account status
+    function resetAccountStatus() {
+      // Retrieve the logged-in email before clearing localStorage
+      const loggedInEmail = localStorage.getItem("loggedInEmail");
+
+      // Clear all data from localStorage
+      localStorage.clear();
+
+      // Restore the logged-in email
+      if (loggedInEmail) {
+        localStorage.setItem("loggedInEmail", loggedInEmail);
+      }
+
+      // Reset the profile image to the default image
+      updateProfileImage(defaultImage);
+
+      // Notify the user
+      alert("ข้อมูลทั้งหมดในระบบถูกล้างเรียบร้อยแล้ว ยกเว้นอีเมลที่เข้าสู่ระบบ");
+    }
+  </script>
+</body>
+</html>

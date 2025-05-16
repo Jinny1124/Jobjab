@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>สร้างแอคเคาท์ (ผู้จ้างงาน)</title>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;600;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" />
+  <link rel="stylesheet" href="../src/assets/styles/5accemployer.css" />
+</head>
+
+<body>
+  <div class="container">
+    <div class="left-panel">
+      <div class="left-content">
+        <h1>สร้าง<br>แอคเคาท์</h1>
+        <p>(ผู้จ้างงาน)</p>
+      </div>
+      <div class="logo">JobJab</div>
+    </div>
+
+    <div class="right-panel">
+      <a href="../components/4inhomepage.html" class="back-arrow">&#10094;</a>
+
+      <form class="form-content" id="employer-form">
+        <h2 class="section-title">ข้อมูลส่วนบุคคล</h2>
+        <div class="personal-info">
+          <div class="profile-section">
+            <div class="profile-image" id="profilePreview">
+              <span>รูปโปรไฟล์</span>
+            </div>
+            <input type="file" id="imageUpload" accept="image/*" style="display: none;" />
+            <button type="button" class="upload-btn" onclick="document.getElementById('imageUpload').click()">อัปโหลดรูปภาพ</button>
+          </div>
+
+          <div class="input-section">
+            <div class="grid-2col">
+              <select id="prefix" required>
+                <option value="">คำนำหน้า</option>
+                <option>นาย</option>
+                <option>นางสาว</option>
+                <option>นาง</option>
+              </select>
+              <input type="text" id="fullname" placeholder="ชื่อจริง - นามสกุล *" required />
+              <input type="text" id="idcard" placeholder="เลขบัตรประชาชน *" required />
+              <input type="text" id="birthDatePicker" placeholder="วว/ดด/ปปปปเกิด *" required />
+              <input type="email" id="email" value readonly />
+              <input type="tel" id="phone" placeholder="เบอร์โทรศัพท์สำหรับติดต่อ *" required />
+            </div>
+          </div>
+        </div>
+
+        <h2 class="section-title">ข้อมูลบริษัท</h2>
+        <div class="grid-2col">
+          <input type="text" id="company" placeholder="ชื่อบริษัท/ชื่อร้านค้า ฯลฯ *" required />
+          <textarea id="companyDesc" placeholder="คำอธิบายบริษัท/ร้านค้า ฯลฯ" required></textarea>
+        </div>
+
+        <div class="checkbox-wrapper">
+          <input type="checkbox" id="terms" class="custom-checkbox" required />
+          <label for="terms" class="checkbox-label">
+            ยอมรับ <a href="#">ข้อตกลงและเงื่อนไขการบริการ</a>
+          </label>
+        </div>
+
+        <button type="submit" class="submit-btn">บันทึกข้อมูล</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  <script>
+    // Initialize the date picker
+    flatpickr("#birthDatePicker", {
+      dateFormat: "d/m/Y",
+      altInput: true,
+      altFormat: "d/m/Y"
+    });
+
+    const imageUpload = document.getElementById("imageUpload");
+    const profilePreview = document.getElementById("profilePreview");
+
+    // Populate the email field from localStorage
+    window.onload = function () {
+      const loggedInEmail = localStorage.getItem("loggedInEmail"); // Retrieve email from localStorage
+      if (loggedInEmail) {
+        document.getElementById("email").value = loggedInEmail; // Populate the email field
+      } else {
+        console.error("No logged-in email found in localStorage");
+      }
+    };
+
+    // Handle image upload and preview
+    imageUpload.addEventListener("change", function () {
+      const file = this.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          const imageData = e.target.result;
+          profilePreview.innerHTML = `<img src="${imageData}" style="width: 100%; height: 100%; object-fit: cover;" />`;
+          const savedProfile = JSON.parse(localStorage.getItem("employer-profile") || "{}");
+          savedProfile.profile_image = imageData; // Add the image to the profile data
+          localStorage.setItem("employer-profile", JSON.stringify(savedProfile)); // Save updated profile data to localStorage
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    // Handle form submission
+    document.getElementById("employer-form").addEventListener("submit", async function (event) {
+      event.preventDefault();
+
+      if (!this.checkValidity()) {
+        alert("กรุณากรอกข้อมูลให้ครบทุกช่องที่จำเป็น!");
+        return;
+      }
+
+      // Collect form data
+      const profileData = {
+        prefix: document.getElementById("prefix").value,
+        full_name: document.getElementById("fullname").value,
+        id_number: document.getElementById("idcard").value,
+        birth_date: document.getElementById("birthDatePicker").value,
+        email: document.getElementById("email").value,
+        phone_number: document.getElementById("phone").value,
+        company_name: document.getElementById("company").value,
+        company_description: document.getElementById("companyDesc").value,
+      };
+
+      // Add the uploaded image file
+      const imageFile = document.getElementById("imageUpload").files[0];
+      if (imageFile) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          profileData.profile_image = e.target.result; // Save image as Base64
+          localStorage.setItem("employer-profile", JSON.stringify(profileData)); // Save profile data to localStorage
+          localStorage.setItem("employer-profile-created", "true"); // Mark profile as created
+          alert("บันทึกโปรไฟล์สำเร็จ!");
+          window.location.href = "profile_ent.html"; // Redirect to profile page
+        };
+        reader.readAsDataURL(imageFile);
+      } else {
+        // Save profile data without an image
+        localStorage.setItem("employer-profile", JSON.stringify(profileData));
+        localStorage.setItem("employer-profile-created", "true");
+        alert("บันทึกโปรไฟล์สำเร็จ!");
+        window.location.href = "profile_ent.html";
+      }
+    });
+  </script>
+</body>
+</html>

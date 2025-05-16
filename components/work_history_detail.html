@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Job Detail</title>
+  <link rel="stylesheet" href="../src/assets/styles/work_history_detail.css"> <!-- เชื่อมโยงไฟล์ CSS -->
+</head>
+
+<body>
+
+  <div class="job-card">
+
+    <div class="top-section">
+      <!-- กล่องใส่รูป -->
+      <div class="image-slider"></div>
+      <div class="job-info">
+        <div class="tags">
+          <div class="tag">Tag</div>
+        </div>
+        <div class="job-meta">
+          <div class="meta-item">
+            <img src="../src/assets/Images/location.png" alt="location">
+            <div>
+              <div>คณะวิศวกรรมศาสตร์</div>
+              <div>มหาวิทยาลัยธรรมศาสตร์</div>
+            </div>
+          </div>
+          <div class="meta-item">
+            <img src="../src/assets/Images/clock.png" alt="clock">
+            <div>
+              <div class="time-range"></div> <!-- Placeholder for start and end time -->
+              <div class="job-date"></div> <!-- Placeholder for date -->
+            </div>
+          </div>
+          <div class="meta-item">
+            <img src="../src/assets/Images/price.png" alt="price">
+            <div class="job-price"><strong></strong></div> <!-- Placeholder for price -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="bottom-section">
+      <div class="job-name">Job Name</div>
+      <div class="poster-name">ชื่อผู้โพสต์งาน</div>
+      <div class="divider"></div>
+      <div class="description">Description...</div>
+      <div class="back-button" onclick="window.location.href='../components/profile_user.html'">&lt;</div>
+    </div>
+  </div>
+  <script>
+  function getQueryParam(param) {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get(param);
+  }
+
+  const jobId = getQueryParam("id");
+  const appliedJobs = JSON.parse(localStorage.getItem("appliedJobs") || "[]");
+  const job = appliedJobs.find(j => j.id === jobId);
+
+  if (job) {
+    // Update job details
+    document.querySelector(".job-name").textContent = job.jobname || "ไม่ระบุชื่องาน";
+    document.querySelector(".description").textContent = job.job_description || "ไม่มีรายละเอียด";
+
+    // Fetch employer profile from localStorage
+    const employerProfile = JSON.parse(localStorage.getItem("employer-profile") || "{}");
+
+    // Update the poster name using employer's full_name
+    document.querySelector(".poster-name").textContent = employerProfile.full_name || "ไม่ระบุชื่อผู้โพสต์";
+
+    // Update the tag dynamically
+    const tagsContainer = document.querySelector(".tags");
+    tagsContainer.innerHTML = `
+      <div class="tag">${job.tag || "No Tag"}</div>
+    `;
+
+    // Update job meta details (time, date, and price)
+    const jobMetaElements = document.querySelectorAll(".job-meta .meta-item div");
+    if (jobMetaElements.length >= 3) {
+      // Update location (if applicable)
+      jobMetaElements[0].innerHTML = job.location || "ไม่ระบุสถานที่";
+
+      // Update start time, end time, and date
+      document.querySelector(".time-range").textContent = `${job.start_time || "ไม่ระบุเวลา"} - ${job.end_time || ""}`;
+      document.querySelector(".job-date").textContent = job.date || "ไม่ระบุวันที่";
+
+      // Update price
+      document.querySelector(".job-price strong").textContent = `${job.price || "ไม่ระบุราคา"} บาท`;
+    }
+
+    // Display job image
+    const jobImageElement = document.querySelector(".image-slider");
+    jobImageElement.innerHTML = `<img src="${job.image || '../src/assets/Images/default-job.png'}" alt="Job Image">`;
+
+    // Create a new container for applicants' statuses
+    const applicantsStatusContainer = document.createElement("div");
+    applicantsStatusContainer.className = "applicants-status";
+    applicantsStatusContainer.innerHTML = `
+      ${job.applicants
+        .map(
+          applicant => `
+        <div class="applicant">
+          <span class="status ${
+            applicant.status === "พิจารณาแล้ว"
+              ? "approved"
+              : applicant.status === "กำลังพิจารณา"
+              ? "pending"
+              : "failed"
+          }">${applicant.status}</span>
+        </div>
+      `
+        )
+        .join("")}
+    `;
+
+    // Append applicants' statuses to the job info section
+    document.querySelector(".job-info").appendChild(applicantsStatusContainer);
+  } else {
+    document.querySelector(".job-card").innerHTML = "<p style='color:red'>ไม่พบงานที่เลือก</p>";
+  }
+</script>
+
+</body>
+
+</html>

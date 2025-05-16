@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Job Application Status</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet" />
+  <link rel="stylesheet" href="../src/assets/styles/job-app-style.css">
+</head>
+
+<body>
+  <div class="container-custom">
+    <div class="header-title">
+      <a href="../components/profile_ent.html" class="back-arrow">&#10094;</a>
+      Job Application Status
+    </div>
+
+    <div class="job-header">
+      <div class="job-left">
+        <h4 id="job-name">Job Name</h4>
+        <div id="job-tags" class="mb-2"></div>
+        <p id="job-description">Description...</p>
+      </div>
+      <div class="job-center" id="job-info">
+        <!-- Filled dynamically -->
+      </div>
+      <div class="job-right text-center">
+        <img id="job-image" src="https://via.placeholder.com/160x100" alt="Job Image" class="mb-2">
+        <a href="../components/job_detail.html" class="btn btn-primary btn-sm">แก้ไขข้อมูล</a>
+      </div>
+    </div>
+
+    <div class="applicant-list mt-4">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="fw-bold">Applicants List</h5>
+        <button class="btn btn-primary" onclick="saveChanges()">บันทึกการเปลี่ยนแปลง</button>
+      </div>
+      <div id="applicants-container">
+        <!-- Filled dynamically -->
+      </div>
+    </div>
+  </div>
+
+  <script>
+
+    // Sample data for job
+    const jobData = {
+      name: "Job Name",
+      description: "งานพาร์ตไทม์ในคณะวิศวกรรมศาสตร์",
+      tags: ["Tag 1", "Tag 2"],
+      location: "คณะวิศวกรรมศาสตร์<br>มหาวิทยาลัยธรรมศาสตร์",
+      time: "09:30น. - 11:30น.",
+      date: "17 พฤษภาคม 2568",
+      pay: "300 บาท",
+      image: "https://via.placeholder.com/160x100"
+    };
+
+    // Sample data for applicants
+    const applicants = [
+      { id: "applicant-1", name: "ชื่อผู้สมัคร A", status: "พิจารณาแล้ว" },
+      { id: "applicant-2", name: "ชื่อผู้สมัคร B", status: "กำลังพิจารณา" },
+      { id: "applicant-3", name: "ชื่อผู้สมัคร C", status: "ไม่ผ่านการพิจารณา" }
+    ];
+
+    const statusChanges = {};
+
+    function renderJobDetails() {
+      // Retrieve the selected job from localStorage
+      const selectedJob = JSON.parse(localStorage.getItem("selectedJob") || "{}");
+      if (!selectedJob.id) {
+        selectedJob.id = "job-001"; // หรือให้เป็น id จริง
+      }
+
+      // Display the job details
+      document.getElementById("job-name").textContent = selectedJob.jobname || "No Job Name";
+      document.getElementById("job-description").textContent = selectedJob.job_description || "No Description";
+      document.getElementById("job-image").src = selectedJob.image || "https://via.placeholder.com/160x100";
+
+      // Display additional job details
+      document.getElementById("job-info").innerHTML = `
+          <p><i class="bi bi-geo-alt me-1"></i> ${selectedJob.location || "No Location"}</p>
+          <p><i class="bi bi-clock me-1"></i> ${selectedJob.start_time || "No Start Time"} - ${selectedJob.end_time || "No End Time"}</p>
+          <p><i class="bi bi-calendar-event me-1"></i> ${selectedJob.date || "No Date"}</p>
+          <p><i class="bi bi-cash-stack me-1"></i> ${selectedJob.price || "No Price"} บาท</p>
+          <p><i class="bi bi-tags me-1"></i> ${selectedJob.tag || "No Tag"}</p>
+      `;
+    }
+
+    function renderApplicants() {
+      const appliedJobs = JSON.parse(localStorage.getItem("appliedJobs") || "[]");
+      const selectedJob = JSON.parse(localStorage.getItem("selectedJob") || "{}");
+      const applicantsContainer = document.getElementById("applicants-container");
+
+      applicantsContainer.innerHTML = "";
+
+      const job = appliedJobs.find(job => job.id === selectedJob.id);
+
+      if (job && job.applicants && job.applicants.length > 0) {
+        job.applicants.forEach(applicant => {
+          const statusClass = getStatusClass(applicant.status);
+          const applicantCard = document.createElement("div");
+          applicantCard.className = "applicant-card";
+
+          applicantCard.innerHTML = `
+        <div class="applicant-name">${applicant.fullname || applicant.name || "ไม่ทราบชื่อ"}</div>
+        <div class="applicant-actions">
+          <a href="#" class="text-primary">ข้อมูลผู้สมัคร</a>
+        </div>
+        <div class="applicant-status">
+          <div class="dropdown">
+            <button class="btn dropdown-toggle status-btn ${statusClass}" type="button" data-bs-toggle="dropdown" id="btn-${applicant.id}">
+              ${applicant.status}
+            </button>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item text-success" onclick="updateStatus('${applicant.id}', 'พิจารณาแล้ว')">พิจารณาแล้ว</a></li>
+              <li><a class="dropdown-item text-primary" onclick="updateStatus('${applicant.id}', 'กำลังพิจารณา')">กำลังพิจารณา</a></li>
+              <li><a class="dropdown-item text-danger" onclick="updateStatus('${applicant.id}', 'ไม่ผ่านการพิจารณา')">ไม่ผ่านการพิจารณา</a></li>
+            </ul>
+          </div>
+        </div>
+      `;
+
+          applicantsContainer.appendChild(applicantCard);
+        });
+      } else {
+        applicantsContainer.innerHTML = "<p>ไม่มีผู้สมัครสำหรับงานนี้</p>";
+      }
+    }
+
+
+
+    function getStatusClass(status) {
+      switch (status) {
+        case "พิจารณาแล้ว": return "btn-success";
+        case "กำลังพิจารณา": return "btn-dark";
+        case "ไม่ผ่านการพิจารณา": return "btn-danger";
+        default: return "btn-secondary";
+      }
+    }
+
+    function updateStatus(applicantId, newStatus) {
+      const button = document.getElementById(`btn-${applicantId}`);
+      if (button) {
+        button.textContent = newStatus;
+        button.className = `btn dropdown-toggle ${getStatusClass(newStatus)} status-btn`;
+      }
+
+      // บันทึกสถานะที่เปลี่ยนไว้ชั่วคราว
+      if (!statusChanges[applicantId]) {
+        statusChanges[applicantId] = newStatus;
+      } else {
+        statusChanges[applicantId] = newStatus;
+      }
+
+      console.log(`Set new status for ${applicantId} = ${newStatus}`);
+    }
+
+
+    function saveChanges() {
+      const appliedJobs = JSON.parse(localStorage.getItem("appliedJobs") || "[]");
+      const selectedJob = JSON.parse(localStorage.getItem("selectedJob") || "{}");
+
+      if (!selectedJob.id) {
+        alert("ไม่พบข้อมูลงานที่เลือก");
+        return;
+      }
+
+      const job = appliedJobs.find(j => j.id === selectedJob.id);
+      if (job && job.applicants) {
+        job.applicants.forEach(applicant => {
+          // Update only applicants whose status has changed
+          if (statusChanges[applicant.id]) {
+            applicant.status = statusChanges[applicant.id];
+          }
+
+          // Save the updated status to the user's application history
+          const userKey = `user-${applicant.id}-applications`;
+          let userApplications = JSON.parse(localStorage.getItem(userKey) || "[]");
+
+          const updatedApps = userApplications.map(app => {
+            if (app.id === selectedJob.id) {
+              return { ...app, applicationStatus: applicant.status };
+            }
+            return app;
+          });
+
+          localStorage.setItem(userKey, JSON.stringify(updatedApps));
+        });
+      }
+
+      // Save the updated appliedJobs back to localStorage
+      localStorage.setItem("appliedJobs", JSON.stringify(appliedJobs));
+
+      alert("บันทึกการเปลี่ยนแปลงเรียบร้อยแล้ว");
+      console.log("Saved changes to localStorage:", appliedJobs);
+
+      // Clear temporary status changes
+      Object.keys(statusChanges).forEach(key => delete statusChanges[key]);
+    }
+
+
+
+
+
+    // Initialize
+    renderJobDetails();
+    renderApplicants();
+
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

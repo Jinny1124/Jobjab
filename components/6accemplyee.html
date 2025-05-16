@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>สร้างแอคเคาท์ (ผู้สมัครงาน)</title>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;600;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../src/assets/styles/5accemployer.css" />
+  <link rel="stylesheet" href="../src/assets/styles/7accemplyee2.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+</head>
+<body>
+  <div class="container">
+    <div class="left-panel">
+      <div>
+        <h1>สร้าง<br/>แอคเคาท์</h1>
+        <p>(ผู้สมัครงาน)</p>
+        <div class="steps">
+          <div class="step">✓ ข้อมูลส่วนบุคคล</div>
+          <span style="margin-top: 80px; margin-left: 20px; font-size: 1.2rem;"> โปรไฟล์</span>
+        </div>
+      </div>
+      <div class="logo">JobJab</div>
+    </div>
+
+    <div class="right-panel">
+      <a href="../components/4inhomepage.html" class="back-arrow">&#10094;</a>
+      <form class="form-content" id="employee-form">
+        <div class="info-grid">
+
+          <div class="left-info">
+            <div class="profile-image" id="profilePreview"><span>รูปโปรไฟล์</span></div>
+            <input type="file" id="imageUpload" accept="image/*" style="display: none;">
+            <button type="button" class="upload-btn"
+              onclick="document.getElementById('imageUpload').click()">อัปโหลดรูปภาพ</button>
+          </div>
+
+          <div class="right-info">
+            <div class="row">
+              <div class="col-30">
+                <select required>
+                  <option value="">คำนำหน้า</option>
+                  <option>นาย</option>
+                  <option>นางสาว</option>
+                  <option>นาง</option>
+                </select>
+              </div>
+              <div class="col-70">
+                <input type="text" id="fullname" placeholder="ชื่อจริง - นามสกุล *" required>
+                <small class="helper-text">ไม่ต้องกรอกคำนำหน้า</small>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-70">
+                <input type="text" id="idcard" placeholder="เลขบัตรประชาชน *" required>
+                <small class="helper-text">เลขบัตรประชาชน 13 หลัก<br>12xxxxxxxxxxx</small>
+              </div>
+              <div class="col-30">
+                <input type="text" id="birthDatePicker" placeholder="วัน/เดือน/ปีเกิด *" required>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-100">
+                <input type="email" value="" readonly>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-100">
+                <input type="tel" id="phone" placeholder="เบอร์โทรศัพท์สำหรับติดต่อ *" required>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button type="submit" class="submit-btn">บันทึกข้อมูล</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  <script>
+    flatpickr("#birthDatePicker", {
+      dateFormat: "d/m/Y",
+      altInput: true,
+      altFormat: "d/m/Y"
+    });
+
+    // Preview uploaded image and save to localStorage
+    const imageUpload = document.getElementById("imageUpload");
+    const profilePreview = document.getElementById("profilePreview");
+
+    imageUpload.addEventListener("change", function () {
+      const file = this.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          const base64Image = e.target.result;
+
+          // Update the profile preview with the uploaded image
+          profilePreview.innerHTML = `<img src="${base64Image}" style="width: 100%; height: 100%; object-fit: cover;" />`;
+
+          // Save the uploaded image to localStorage
+          const savedProfile = JSON.parse(localStorage.getItem("employee-profile") || "{}");
+          savedProfile.profile_image = base64Image; // Add the image to the profile data
+          localStorage.setItem("employee-profile", JSON.stringify(savedProfile));
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    // Populate the email field from localStorage
+    window.onload = function () {
+      const loggedInEmail = localStorage.getItem("loggedInEmail"); // Retrieve email from localStorage
+      if (loggedInEmail) {
+        document.querySelector("input[type='email']").value = loggedInEmail; // Populate the email field
+      } else {
+        console.error("No logged-in email found in localStorage");
+      }
+
+      // Load existing profile data (if any) and update the profile preview
+      const savedProfile = JSON.parse(localStorage.getItem("employee-profile") || "{}");
+      if (savedProfile.profile_image) {
+        profilePreview.innerHTML = `<img src="${savedProfile.profile_image}" style="width: 100%; height: 100%; object-fit: cover;" />`;
+      }
+    };
+
+    // Validate and save form data to localStorage
+    document.getElementById("employee-form").addEventListener("submit", function (e) {
+      if (!this.checkValidity()) {
+        e.preventDefault();
+        alert("กรุณากรอกข้อมูลให้ครบทุกช่องที่จำเป็น!");
+        return;
+      }
+
+      e.preventDefault();
+
+      // Collect form data
+      const profileData = {
+        fullname: document.getElementById("fullname").value.trim(),
+        idcard: document.getElementById("idcard").value.trim(),
+        birthdate: document.getElementById("birthDatePicker").value.trim(),
+        phone: document.getElementById("phone").value.trim(),
+        email: document.querySelector("input[type='email']").value.trim(), // Get email from the email field
+      };
+
+      // Add the uploaded image to the profile data
+      const savedProfile = JSON.parse(localStorage.getItem("employee-profile") || "{}");
+      if (savedProfile.profile_image) {
+        profileData.profile_image = savedProfile.profile_image;
+      }
+
+      // Save the profile data to localStorage
+      localStorage.setItem("employee-profile", JSON.stringify(profileData));
+      localStorage.setItem("employee-completed", "true");
+
+      // Redirect to the next page
+      window.location.href = "../components/7accemplyee2.html";
+    });
+  </script>
+  
+</body>
+</html>

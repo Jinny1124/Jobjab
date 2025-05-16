@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ProfileEnt - JobJab</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Encode+Sans:wght@500;700;800&family=Carlito:wght@700&display=swap"
+      rel="stylesheet">
+    <link rel="stylesheet" href="../src/assets/styles/profile_ent.css">
+</head>
+
+<body>
+<!-- NavBar -->
+<div class="navbar">
+    <div class="nav-left">
+        
+        <a href="../components/4inhomepage.html" class="back-arrow">&#10094;</a>
+        <div class="nav-logo">JobJab</div>
+    </div>
+    <div class="nav-user">
+        <div class="nav-actions">
+            <button class="add-job-btn" onclick="window.location.href='../components/Job_detail.html'">
+              <span class="plus">+</span> เพิ่มประกาศงาน
+            </button>
+            <img src="../src/assets/Images/person-circle.png" alt="User" class="nav-avatar" />
+          </div>
+          
+    </div>
+</div>
+    
+<!-- Information Section -->
+    <section class="info-section">
+        <h1>Information</h1>
+        <div class="info-card">
+            <div class="info-columns">
+              <div class="personal-info" id="personal-info">
+                <!-- ข้อมูลส่วนบุคคล -->
+              </div>
+              <div class="company-info" id="company-info">
+                <!-- ข้อมูลบริษัท -->
+              </div>
+            </div>
+            <div class="profile-info">
+              <div class="profile-pic" id="profile-pic"></div>
+              <button class="edit-btn" onclick="window.location.href='../components/5accemployer.html'">แก้ไขข้อมูล</button>
+            </div>
+          </div>
+          
+    </section>
+  
+<section class="job-history-section">
+    <div class="job-history-header">
+        <h1>Job Posting History</h1>
+        <input type="text" class="search-box" placeholder="ค้นหา...">
+    </div>
+    
+    <div class="history-container">
+        <!-- Job cards will be dynamically added here -->
+    </div>
+</section>
+
+<!-- Footer Section -->
+<footer style="text-align: center; margin: 40px auto; display: flex; justify-content: center;">
+    <button 
+        onclick="resetJobList()" 
+        style="padding: 10px 20px; font-size: 1rem; background-color: #665F5F; color: white; border: none; border-radius: 8px; cursor: pointer;">
+        🔄 ล้างข้อมูลประกาศงาน
+    </button>
+</footer>
+
+<script>
+// Retrieve profile data from localStorage
+const profile = JSON.parse(localStorage.getItem("employer-profile") || "{}");
+
+document.getElementById("personal-info").innerHTML = `
+  <p><strong>ข้อมูลส่วนบุคคล</strong></p>
+  <p><strong>ชื่อ:</strong> ${profile.prefix || ""} ${profile.full_name || "-"}</p>
+  <p><strong>เลขบัตรประชาชน:</strong> ${profile.id_number || "-"}</p>
+  <p><strong>วันเกิด:</strong> ${profile.birth_date || "-"}</p>
+  <p><strong>โทรศัพท์:</strong> ${profile.phone_number || "-"}</p>
+  <p><strong>Email:</strong> ${profile.email || "-"}</p>
+`;
+
+document.getElementById("company-info").innerHTML = `
+  <p><strong>ข้อมูลบริษัท</strong></p>
+  <p><strong>ชื่อบริษัท:</strong> ${profile.company_name || "-"}</p>
+  <p><strong>คำอธิบาย:</strong> ${profile.company_description || "-"}</p>
+`;
+
+const pic = profile.profile_image || "";
+if (pic) {
+  const picContainer = document.getElementById("profile-pic");
+  picContainer.style.background = "none";
+  picContainer.innerHTML = `<img src="${pic}" style="width: 100%; height: 100%; object-fit: cover;" />`;
+}
+
+// Retrieve job data from localStorage
+const jobs = JSON.parse(localStorage.getItem("jobList") || "[]");
+
+// Get the history container element
+const historyContainer = document.querySelector(".history-container");
+
+// Clear the container
+historyContainer.innerHTML = "";
+
+// Loop through the jobs and create job cards
+jobs.forEach((job, index) => {
+    if (!job || !job.jobname) {
+        console.warn(`Skipping invalid job at index ${index}:`, job);
+        return;
+    }
+
+    const jobCard = document.createElement("div");
+    jobCard.className = "job-card";
+
+    jobCard.innerHTML = `
+        <div class="job-details">
+            <h3>${job.jobname}</h3>
+            <p class="job-description">${job.job_description}</p>
+            <div class="tags">
+                <span class="tag">${job.tag}</span>
+            </div>
+        </div>
+        <span class="status ${job.status === "open" ? "open" : "closed"}">
+            ${job.status === "open" ? "เปิดรับสมัคร" : "ปิดรับสมัคร"}
+        </span>
+        <div class="preview-pic">
+            <img src="${job.image || 'default-image.jpg'}" class="card-img-top" alt="${job.jobname}">
+        </div>
+        <button class="view-btn" onclick='viewJobStatus(${index})'>ดูรายละเอียด</button>
+    `;
+
+    historyContainer.appendChild(jobCard);
+});
+
+// Function to view job status
+function viewJobStatus(index) {
+    // Retrieve the job list from localStorage
+    const jobs = JSON.parse(localStorage.getItem("jobList") || "[]");
+
+    // Log the index and job list for debugging
+    console.log("Index:", index);
+    console.log("Job List:", jobs);
+
+    // Get the selected job
+    const selectedJob = jobs[index];
+
+    // Log the selected job for debugging
+    console.log("Selected Job:", selectedJob);
+
+    // Save the selected job to localStorage
+    localStorage.setItem("selectedJob", JSON.stringify(selectedJob));
+
+    // Redirect to job-app-status.html
+    window.location.href = "../components/job-app-status.html";
+}
+
+// Function to reset job list
+function resetJobList() {
+    const confirmReset = confirm("คุณแน่ใจหรือไม่ว่าต้องการล้างข้อมูลประกาศงานทั้งหมด?");
+    if (confirmReset) {
+        // Remove job list from localStorage
+        localStorage.removeItem("jobList");
+
+        // Remove applied jobs from localStorage
+        localStorage.removeItem("appliedJobs");
+
+        // Clear the job history container
+        const historyContainer = document.querySelector(".history-container");
+        historyContainer.innerHTML = "<p>ไม่มีข้อมูลประกาศงาน</p>";
+
+        alert("ล้างข้อมูลสำเร็จ!");
+    }
+}
+
+</script>  
+</body>
+
+</html>

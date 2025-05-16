@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>สมัครงาน</title>
+  <link rel="stylesheet" href="../src/assets/styles/work_regis.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+
+<body>
+  <div id="overlay" class="overlay" style="display: none;"></div>
+  <div id="alert-box" class="alert-box" style="display: none;">
+    <div class="alert-content">
+      <div class="alert-row">
+        <i class="fas fa-exclamation-triangle alert-icon"></i>
+        <div class="alert-text">
+          <div class="alert-title">คำเตือน</div>
+          <div class="alert-message">กรุณาตรวจสอบข้อมูลให้ถูกต้องก่อนกดสมัครงาน</div>
+        </div>
+      </div>
+      <!-- ปุ่มยืนยันและยกเลิกใน alert -->
+      <div class="alert-buttons">
+    <button onclick="cancelAlert()" class="alert-button cancel">ยกเลิก</button>
+    <button onclick="confirmAlert()" class="alert-button confirm">ยืนยัน</button>
+</div>
+    </div>
+  </div>
+  <div class="back-button" onclick="history.back()">&#x276E;</div>
+  <div class="container">
+    <div class="header"> 
+      <h1>สมัครงาน</h1>
+    </div>
+
+    <div class="section-box">
+      <div class="section-title">ข้อมูลส่วนบุคคล</div>
+      <div class="profile-container">
+        <img src="../assets/Images/akkharawoot.jpg" class="profile-img" alt="profile" />
+        <div class="info-form">
+          <div class="row">
+            <select>
+              <option selected><strong>นาย</strong></option>
+              <option>นาง</option>
+              <option>นางสาว</option>
+            </select>
+            <input class="input-box" type="text" placeholder="อัครวุฒิ ตาคม" style="color: #000000;">
+          </div>
+          <div class="row">
+            <input class="input-box input-placeholder" type="text" placeholder="เลขบัตรประชาชน">
+            <input class="input-box input-placeholder" type="date">
+          </div>
+          <div class="row">
+            <div class="input-icon">
+              <i class="fa-solid fa-envelope"></i>
+              <input type="email" value="akkharawoot@gmail.com" readonly> <!--EDIT-->
+            </div>
+          </div>
+          <div class="row">
+            <div class="input-icon">
+              <i class="fa-solid fa-phone"></i>
+              <input type="tel" value="0123456789">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="section-box resume-section">
+      <div class="section-title" style="text-align: left;">Resume</div>
+      <div class="upload-row">
+        <div class="file-display" id="file-name"></strong>ชื่อไฟล์.pdf</strong></div>
+        <button class="upload-btn" onclick="document.getElementById('file-input').click();">
+          <strong>อัปโหลดไฟล์</strong>
+        </button>
+        <input type="file" id="file-input" style="display: none;" />
+      </div>
+      <div class="checkbox-row">
+        <input type="checkbox" id="confirm" />
+        <label for="confirm"><strong>ยืนยันข้อมูล</strong></label>
+      </div>
+      <button class="submit-btn"><strong>สมัครงาน</strong></button>
+    </div>
+
+  </div>
+<script>
+  const fileInput = document.getElementById("file-input");
+  const fileNameDisplay = document.getElementById("file-name");
+
+  fileInput.addEventListener("change", function () {
+    if (fileInput.files.length > 0) {
+      const uploadedFile = URL.createObjectURL(fileInput.files[0]);
+      fileNameDisplay.textContent = fileInput.files[0].name;
+      localStorage.setItem("uploadedFile", uploadedFile);
+    } else {
+      fileNameDisplay.textContent = "ชื่อไฟล์.pdf";
+      localStorage.removeItem("uploadedFile");
+    }
+  });
+
+  let formData = {}; // เก็บข้อมูลที่กรอกไว้ใช้ตอนยืนยัน
+
+  document.querySelector(".submit-btn").addEventListener("click", function () {
+    const name = document.querySelector('input[placeholder="อัครวุฒิ ตาคม"]').value.trim();
+    const idCard = document.querySelector('input[placeholder="เลขบัตรประชาชน"]').value.trim();
+    const birthDate = document.querySelector('input[type="date"]').value.trim();
+    const phone = document.querySelector('input[type="tel"]').value.trim();
+    const confirmChecked = document.getElementById("confirm").checked;
+    const fileUploaded = fileInput.files.length > 0;
+
+    if (!name || !idCard || !birthDate || !phone || !confirmChecked || !fileUploaded) {
+      alert("กรุณากรอกข้อมูลให้ครบทุกช่อง และแนบไฟล์ พร้อมติ๊กยืนยันข้อมูล");
+      return;
+    }
+
+    // เก็บข้อมูลไว้ใช้ตอนกดยืนยัน
+    formData = { name, idCard, birthDate, phone };
+
+    // แสดงกล่องแจ้งเตือน
+    document.getElementById("alert-box").style.display = "block";
+    document.getElementById("overlay").style.display = "block";
+  });
+
+  // กด "ยืนยัน" จาก alert เพื่อสมัคร
+function confirmAlert() {
+  const selectedJob = JSON.parse(localStorage.getItem("selectedJob") || "{}");
+  const appliedJobs = JSON.parse(localStorage.getItem("appliedJobs") || "[]");
+  const employeeProfile = JSON.parse(localStorage.getItem("employee-profile") || "{}");
+
+  const applicant = {
+    id: employeeProfile.id,
+    fullname: employeeProfile.fullname,
+    name: employeeProfile.fullname, // backup
+    status: "กำลังพิจารณา",
+    idCard: employeeProfile.idcard,
+    phone: employeeProfile.phone,
+    email: employeeProfile.email,
+    birthDate: employeeProfile.birthdate,
+    profile_image: employeeProfile.profile_image
+  };
+
+  // เพิ่มผู้สมัครลงใน selectedJob
+  selectedJob.id = selectedJob.id || String(Date.now());
+  selectedJob.applicants = selectedJob.applicants || [];
+
+  // กันซ้ำ
+  const alreadyApplied = selectedJob.applicants.some(a => a.id === applicant.id);
+  if (!alreadyApplied) {
+    selectedJob.applicants.push(applicant);
+  }
+
+  // เพิ่มหรืออัปเดต appliedJobs
+  const jobIndex = appliedJobs.findIndex(job => job.id === selectedJob.id);
+  if (jobIndex !== -1) {
+    appliedJobs[jobIndex] = selectedJob;
+  } else {
+    appliedJobs.push(selectedJob);
+  }
+
+  localStorage.setItem("appliedJobs", JSON.stringify(appliedJobs));
+  window.location.href = "../components/profile_user.html";
+}
+
+
+
+  // กด "ยกเลิก" จาก alert เพื่อปิดกล่องเฉย ๆ
+  function cancelAlert() {
+    document.getElementById("alert-box").style.display = "none";
+    document.getElementById("overlay").style.display = "none";
+  }
+
+  document.addEventListener("DOMContentLoaded", function () {
+    const employeeProfile = JSON.parse(localStorage.getItem("employee-profile") || "{}");
+
+    if (!employeeProfile || Object.keys(employeeProfile).length === 0) {
+      alert("ไม่พบข้อมูลผู้สมัคร กรุณากลับไปสมัครงานใหม่");
+      window.location.href = "../components/apply_user.html";
+      return;
+    }
+
+    document.querySelector('input[placeholder="อัครวุฒิ ตาคม"]').value = employeeProfile.fullname || "";
+    document.querySelector('input[placeholder="เลขบัตรประชาชน"]').value = employeeProfile.idcard || "";
+    document.querySelector('input[type="date"]').value = employeeProfile.birthdate || "";
+    document.querySelector('input[type="tel"]').value = employeeProfile.phone || "";
+    document.querySelector('input[type="email"]').value = employeeProfile.email || "";
+
+    const profileImageElement = document.querySelector(".profile-img");
+    if (employeeProfile.profile_image) {
+      profileImageElement.src = employeeProfile.profile_image;
+    }
+  });
+</script>
+
+
+
+</body>
+
+</html>

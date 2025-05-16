@@ -1,0 +1,175 @@
+<!-- ADD NEW JOB -->
+<!DOCTYPE html>
+<html lang="th">
+<head
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Job Detail</title>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;600;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../src/assets/styles/job_detail.css" />
+</head>
+
+<body>
+    <div class="page">
+        <div class="form-container">
+            <div class="header">
+                <a href="../components/profile_ent.html" class="back-arrow">&#10094;</a>
+                <h1 class="title">Job Detail</h1>
+            </div>
+            <div class="form-grid">
+                <div class="form-left">
+                    <input type="text" id="job-name" placeholder="Job Name" required />
+                    <input type="text" id="location" placeholder="Location" required />
+
+                    <div class="flex-row">
+                        <input type="date" id="date" />
+                        <input type="number" id="price" placeholder="Price" required />
+                    </div>
+
+                    <div class="flex-row">
+                        <div class="time-group">
+                            <label for="start-time">Start Time</label>
+                            <input type="time" id="start-time" required />
+                        </div>
+                        <div class="time-group">
+                            <label for="end-time">End Time</label>
+                            <input type="time" id="end-time" required />
+                        </div>
+                    </div>
+
+                    <select id="tag" required>
+                        <option value="งานในมหาวิทยาลัย">งานในมหาวิทยาลัย</option>
+                        <option value="งานยอดนิยม">งานยอดนิยม</option>
+                        <option value="การตลาด">การตลาด</option>
+                        <option value="โฆษณา">โฆษณา</option>
+                        <option value="กราฟิก">กราฟิก</option>
+                        <option value="ออกแบบ">ออกแบบ</option>
+                        <option value="เว็บไซต์">เว็บไซต์</option>
+                        <option value="ตรวจบ้านคอนโด">ตรวจบ้านคอนโด</option>
+                        <option value="ช่างไฟฟ้า">ช่างไฟฟ้า</option>
+                        <option value="ช่างประปา">ช่างประปา</option>
+
+                    </select>
+                </div>
+
+                <div class="form-right">
+                    <div class="image-preview" id="imagePreview"></div>
+                    <input type="file" id="imageUpload" accept="image/*" hidden />
+                    <button class="upload-btn"
+                        onclick="document.getElementById('imageUpload').click()">อัปโหลดรูปภาพ</button>
+                </div>
+            </div>
+
+            <textarea id="description" placeholder="Description" required></textarea>
+
+            <div class="bottom-bar">
+                <label class="toggle">
+                    <input type="checkbox" id="publishToggle" />
+                    <span class="slider"></span>
+                    <span class="toggle-label">เปิดรับสมัคร</span>
+                </label>
+
+                <button class="save-btn" onclick="saveJob()">บันทึก</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById("imageUpload").addEventListener("change", function () {
+            const file = this.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    document.getElementById("imagePreview").style.backgroundImage = `url(${e.target.result})`;
+                    localStorage.setItem("jobImage", e.target.result);
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        function saveJob() {
+            const jobName = document.getElementById("job-name").value.trim();
+            const location = document.getElementById("location").value.trim();
+            const date = document.getElementById("date").value;
+            const price = document.getElementById("price").value;
+            const startTime = document.getElementById("start-time").value;
+            const endTime = document.getElementById("end-time").value;
+            const tag = document.getElementById("tag").value;
+            const description = document.getElementById("description").value.trim();
+            const isOpen = document.getElementById("publishToggle").checked;
+
+            // Get the uploaded image from localStorage (saved during image upload)
+            const image = localStorage.getItem("jobImage");
+
+            if (!jobName || !location || !date || !price || !startTime || !endTime || !tag || !description) {
+                alert("กรุณากรอกข้อมูลให้ครบทุกช่องก่อนบันทึก");
+                return;
+            }
+
+            const jobData = {
+                id: Date.now().toString(), // Generate a unique ID for the job
+                jobname: jobName,
+                location,
+                date,
+                price,
+                start_time: startTime,
+                end_time: endTime,
+                tag,
+                job_description: description,
+                status: isOpen ? "open" : "close",
+                image: image || "" // Include the image in the job data
+            };
+
+            // Save the job data to localStorage
+            const jobs = JSON.parse(localStorage.getItem("jobList") || "[]");
+            jobs.push(jobData);
+            localStorage.setItem("jobList", JSON.stringify(jobs));
+
+            alert("บันทึกงานสำเร็จ!");
+            window.location.href = "../components/profile_ent.html"; // Redirect to employer profile page
+        }
+
+        // Save the uploaded image to localStorage
+        document.getElementById("imageUpload").addEventListener("change", function () {
+            const file = this.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    localStorage.setItem("jobImage", e.target.result); // Save the image as Base64
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Retrieve the image from localStorage
+        const jobImage = localStorage.getItem("jobImage");
+
+        // Check if the image exists in localStorage
+        if (jobImage) {
+            // Set the image as the background of the preview container
+            document.getElementById("imagePreview").style.backgroundImage = `url(${jobImage})`;
+        } else {
+            console.log("No image found in localStorage.");
+        }
+
+        window.onload = function () {
+            const job = JSON.parse(localStorage.getItem("jobDetail"));
+            if (job) {
+                document.getElementById("job-name").value = job.name;
+                document.getElementById("location").value = job.location;
+                document.getElementById("date").value = job.date;
+                document.getElementById("price").value = job.price;
+                document.getElementById("start-time").value = job.startTime;
+                document.getElementById("end-time").value = job.endTime;
+                document.getElementById("tag").value = job.tag;
+                document.getElementById("description").value = job.description;
+
+                if (job.image) {
+                    document.getElementById("imagePreview").style.backgroundImage = `url(${job.image})`;
+                }
+            }
+        };
+    </script>
+</body>
+
+</html>

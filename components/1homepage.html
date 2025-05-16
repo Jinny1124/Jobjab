@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+
+<html lang="th">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Job Web Scroll Page</title>
+  <link rel="stylesheet" href="../src/assets/styles/1style.css">
+</head>
+
+<body>
+
+  <div class="topbar">
+    <div class="logo">JobJab</div>
+
+<input type="text" class="search-box" placeholder="ค้นหา..." />
+
+<div class="auth-buttons">
+  <a class="signup" href="../components/3signup.html">Sign Up</a>
+  <a class="login" href="../components/2login.html">Log In</a>
+  <div class="icon"></div>
+</div>
+  </div>
+  <section class="hero">
+    <div class="hero-container">
+      <div class="hero-image">
+        <img id="profile-picture" src="/src/assets/Images/Annonymous Image.png" alt="รูปโปรไฟล์">
+      </div>
+      <div class="hero-text">
+        <div class="greeting" id="greeting-text"></div>
+        <p>เริ่มต้นหางานที่ใช่กับเรา</p>
+      </div>
+    </div>
+  </section>
+
+  <script>
+  // ดึงข้อมูลผู้ใช้จาก API
+    const defaultImage = '/src/assets/Images/Annonymous Image.png';
+    fetch('/api/user')
+      .then(response => response.json())
+      .then(user => {
+        const name = user.name || 'JobJab';
+        const image = user.image || defaultImage;
+
+        document.getElementById('profile-picture').src = image;
+        document.getElementById('greeting-text').innerHTML = "สวัสดี!<br>คุณ" + name;
+        document.querySelector('.icon').style.backgroundImage = `url('${image}')`;
+      })
+      .catch(error => {
+        console.error('ไม่สามารถโหลดข้อมูลผู้ใช้:', error);
+
+        // Fallback greeting and image
+        document.getElementById('greeting-text').innerHTML = "สวัสดี!<br>คุณJobJab";
+        document.querySelector('.icon').style.backgroundImage = `url('${defaultImage}')`;
+      });
+  </script>
+
+  <section class="section1">
+    <div class="career-grid">
+      <a href="../components/job_finder.html" class="grid-item featured">งานในมหาวิทยาลัย</a> <!--Can click-->
+      <a href="#" class="grid-item">งานยอดนิยม</a>
+      <a href="#" class="grid-item">การตลาด</a>
+      <a href="#" class="grid-item">โฆษณา</a>
+      <a href="#" class="grid-item">กราฟิก</a>
+      <a href="#" class="grid-item">ออกแบบ</a>
+      <a href="#" class="grid-item">เว็บไซต์</a>
+      <a href="#" class="grid-item">ตรวจบ้านคอนโด</a>
+      <a href="#" class="grid-item">ช่างไฟฟ้า</a>
+      <a href="#" class="grid-item">ช่างประปา</a>
+      <a href="#" class="grid-item">งานบริการ</a>
+      <a href="#" class="grid-item">งานพาร์ทไทม์</a>
+    </div>
+  </section>
+
+  <section class="section2">
+    <div class="stats-container">
+      <div class="stats-box">
+        <div class="stats-title">จำนวนตำแหน่งงานที่เปิดรับ</div>
+        <div class="stats-number">XX</div>
+        <div class="stats-unit">คน</div>
+      </div>
+      <div class="stats-box">
+        <div class="stats-title">จำนวนผู้สมัคร</div>
+        <div class="stats-number">XX</div>
+        <div class="stats-unit">คน</div>
+      </div>
+      <div class="stats-box">
+        <div class="stats-title">จำนวนบริษัทที่ลงทะเบียน</div>
+        <div class="stats-number">XX</div>
+        <div class="stats-unit">ที่</div>
+      </div>
+      <div class="footer">
+        © 2025 Thammasat University. All rights reserved.
+      </div>
+    </div>
+  </section>
+
+</body>
+
+</html>
