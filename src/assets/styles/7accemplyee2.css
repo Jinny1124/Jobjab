@@ -1,0 +1,149 @@
+body {
+    margin: 0;
+    font-family: 'Prompt', sans-serif;
+    background-color: #f5f8ff;
+  }
+  
+  .container {
+    display: flex;
+    height: 100vh;
+    gap: 20px;
+    padding: 20px;
+    box-sizing: border-box;
+  }
+  
+  .left-panel {
+    width: 30%;
+    background: linear-gradient(to bottom, #d7e5fc, #f0f4ff);
+    border-radius: 12px;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  
+  .left-panel h1 {
+    font-size: 3.5rem;
+    font-weight: 800;
+    color: #0d1b4c;
+    margin: 0;
+  }
+  
+  .left-panel p {
+    font-size: 1.4rem;
+    color: #0d1b4c;
+  }
+  
+  .back-arrow {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    font-size: 28px;
+    text-decoration: none;
+    color: #0d1b4c;
+  }
+
+  .steps {
+    margin-top: 20px;
+  }
+  
+  .step {
+    font-size: 1.2rem;
+    color: #5B75F9;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+  
+  .logo {
+    font-weight: bold;
+    font-size: 1.5rem;
+    color: #0d1b4c;
+  }
+  
+  .right-panel {
+    width: 70%;
+    background-color: #eaf1fb;
+    border-radius: 12px;
+    padding: 30px 40px;
+    overflow-y: auto;
+    position: relative;
+  }
+  
+  .section {
+    margin-bottom: 30px;
+  }
+  
+  .section-header {
+    border-bottom: 3px solid #0d1b4c;
+    margin-bottom: 10px;
+  }
+  
+  .section-header h2 {
+    font-size: 1.6rem;
+    color: #0d1b4c;
+    margin: 0 0 10px 0;
+  }
+  
+  .input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  
+  .input-group input {
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+  }
+  
+  button {
+    background-color: #5B75F9;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    margin-bottom: 10px;
+  }
+  
+  .list {
+    max-height: 200px;
+    overflow-y: auto;
+  }
+  
+  .list-item {
+    background: white;
+    padding: 10px;
+    margin-bottom: 8px;
+    border-radius: 10px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    position: relative;
+  }
+  
+  .list-item p {
+    margin: 2px 0;
+    font-size: 0.95rem;
+  }
+  
+  .remove-btn {
+    position: absolute;
+    top: 0.16rem;
+    right: 20px;
+    color: red;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 2rem;
+    margin-left: 10px;
+  align-self: center;
+  }
+  
+  .save-btn {
+    width: 100%;
+    background-color: #0d1b4c;
+    margin-top: 20px;
+    justify-content: center;
+  }
+  

@@ -1,0 +1,391 @@
+body {
+    font-family: 'Encode Sans', sans-serif;
+    background-image: url("/src/assets/Images/background1.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    padding: 30px;
+    margin: 0;
+}
+ 
+.navbar {
+    background: #f5f8fc;
+    border-radius: 40px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 1000px;
+    margin: 0 auto 30px auto;
+    position: relative;
+  }
+  
+  .nav-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  
+  .back-arrow {
+    display: inline-block;
+    font-size: 24px;
+    color: #0d1b4c;
+    text-decoration: none;
+  }
+  
+  
+.nav-logo {
+    font-size: 20px;
+    font-weight: 700;
+    color: #0d1b4c;
+    white-space: nowrap;
+  }
+  
+    .nav-dropdown {
+        margin-left: auto; 
+        display: flex;
+        align-items: center;
+        position: relative; 
+    }
+
+    .dropdown-btn {
+        background-color: #627BD8;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 16px;
+        font-size: 14px;
+        font-weight: 700;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        box-shadow: 0 4px 4px rgba(0,0,0,0.25);
+        right: 20px;
+    }
+  
+    .dropdown-btn:hover {
+        background-color: #3752d2;
+    }
+  
+    .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: white;
+        min-width: 150px;
+        box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+        border-radius: 10px;
+        margin-top: 5px;
+            top: 100%;
+        left: 0; 
+        z-index: 10;
+    }
+  
+    .dropdown-content a {
+        color: #959595;
+        padding: 10px 15px;
+        text-decoration: none;
+        display: block;
+    }
+  
+    .dropdown-content a:hover {
+        background-color: #f0f0f0;
+    }
+  
+    .nav-dropdown:hover .dropdown-content {
+        display: block;
+    }
+  
+    .nav-user {
+        margin-left: 10px;
+    }
+
+    .nav-user img {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+
+/* ----- Information Section ----- */
+    .info-section {
+        display: flex;
+        flex-direction: column;
+        align-items: left;
+        gap: 10px;
+    }
+
+    .info-section h1 {
+        font-size: 28px;
+        font-weight: 800;
+        color: #091F5B;
+        margin-bottom: 10px;
+    }
+  
+    .info-card {
+        display: flex;
+        background-color: #D0E0F7;
+        box-shadow: 5px 5px 5px rgba(0,0,0,0.25);
+        border-radius: 12px;
+        padding: 20px 20px;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 20px;
+    }
+  
+    .personal-info {
+        flex: 1;
+        font-size: 16px;
+        color: #091F5B;
+    }
+  
+    .profile-info {
+        align-items: center;
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .profile-pic {
+        width: 120px;
+        height: 144px;
+        object-fit: cover;
+        border-radius: 8px;
+        background-color: #fff;
+        box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.2) inset;
+      }
+      
+  
+    .edit-btn {
+        margin-top: 10px;
+        background-color: #627BD8;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 30px;
+        cursor: pointer;
+        font-size: 16px;
+        box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.2)
+    }
+  
+    .edit-btn:hover {
+        background-color: #627BD8;
+    }
+  
+/* -----Record Section ----- */
+    .record-container {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        row-gap: 20px;
+        column-gap: 40px;
+        align-items: start;
+        background-color: #D0E0F7;
+        color: #091F5B;
+        box-shadow: 5px 5px 5px rgba(0,0,0,0.25);
+        border-radius: 12px;
+        padding: 20px 20px;
+        margin-top: 30px;
+        justify-content: space-between;
+        gap: 20px;
+    }
+
+    .record-container h1 {
+        margin: 0;
+        align-self: top;
+    }
+    
+    .record-block {
+        position: relative;
+        background-color: white;
+        border-radius: 10px;
+        padding: 15px 20px;
+        width: 97%;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .record-title {
+        font-size: 16px;
+        font-weight: bold;
+        color: #959595;
+        margin: 0 0 5px 0;
+    }
+    
+    .record-subtitle {
+        font-size: 14px;
+        color: #D3D3D3;
+        margin: 0 0 10px 0;
+    }
+    
+    .record-meta {
+        position: absolute; 
+        top: 15px;
+        right: 20px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 14px;
+        color: #D3D3D3;
+    }
+
+    .record-meta img {
+        width: 18px;
+        height: 18px;
+    }
+
+/* ----- Applied History ----- */
+    .apply-history-section {
+        margin-top: 40px;
+    }
+
+    .apply-history-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+  
+    .apply-history-header h1 {
+        font-size: 28px;
+        font-weight: 800;
+        color: #091F5B;
+    }
+  
+    .search-box {
+        border: 1px solid white;
+        box-shadow:  4px 4px 8px rgba(0,0,0,0.25) inset;
+        border-radius: 20px;
+        padding: 8px 16px;
+        font-size: 14px;
+        width: 180px;
+    }
+  
+    .history-container {
+        background: #A2C1F0;
+        border-radius: 10px;
+        align-content: center;
+        display: flex; /* Use flexbox for alignment */
+        flex-direction: column; /* Stack job cards vertically */
+        align-items: center; /* Center job cards horizontally */
+        padding: 20px 20px
+    }
+
+    .job-card {
+        background-color: white;
+        border-radius: 12px;
+        padding: 16px;
+        margin-top: 20px;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        width: 95%;
+        height: 150px;
+    }
+  
+    .job-details h3 {
+        font-size: 18px;
+        font-weight: bold;
+        margin: 0;
+    }
+  
+    .job-details p {
+        font-size: 14px;
+        margin: 4px 0;
+    }
+  
+    .tags {
+        position: absolute;
+        bottom: 10px;
+        left: 20px;
+        right: 20px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+  
+    .tag {
+        background-color: #D8E5F8;
+        border-radius: 10px;
+        padding: 4px 10px;
+        font-size: 12px;
+        color: #4D4D4D;
+    }
+
+/* Status Labels */
+    .status {
+        position: absolute;
+        top: 16px;
+        right: 180px; /* ขยับให้ไม่ทับกับ preview-pic */
+        padding: 4px 10px;
+        font-size: 16px;
+        font-weight: bold;
+        border-radius: 8px;
+        color: white;
+        z-index: 2;
+    }
+  
+    .status.approved {
+        background-color: #27c97a;
+        box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.2)
+    }
+  
+    .status.failed {
+        background-color: #e44848;
+        box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.2)
+    }
+
+    .status.pending {
+        background-color: #091F5B;
+        box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.2)
+    }
+
+/* Preview & Button */
+    .preview-pic {
+        position: absolute;
+        top: 16px;
+        right: 16px;
+        width: 120px; /* Adjusted width */
+        height: 80px; /* Adjusted height */
+        background-color: #d1d1d1;
+        box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.2) inset;
+        border-radius: 8px;
+        overflow: hidden; /* Ensures the image doesn't overflow */
+        z-index: 1;
+    }
+
+    .preview-pic img {
+        width: 100%; /* Ensures the image fits the container */
+        height: 100%; /* Ensures the image fits the container */
+        object-fit: cover; /* Ensures the image maintains aspect ratio and fills the container */
+        border-radius: 8px; /* Matches the container's border radius */
+    }
+
+    .view-btn {
+        align-self: flex-end;
+        top: 200px; 
+        right: 16px;
+        background-color: #627BD8;
+        color: white;
+        box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.2);
+        padding: 6px 12px;
+        border: none;
+        border-radius: 30px;
+        cursor: pointer;
+        font-size: 15px;  
+        font-weight: bold;  
+        margin-top: auto;
+        text-decoration: none;
+    }
+
+    .view-btn:hover {
+        background-color: #3752d2;
+    }
+
+    .job-description {
+        font-size: 16px;
+        color: #959595;
+        margin-bottom: 15px;
+    }
+

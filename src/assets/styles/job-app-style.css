@@ -1,0 +1,139 @@
+body {
+  background: linear-gradient(to bottom, #e6f3ff, #ffffff);
+  padding: 2rem;
+}
+
+.container-custom {
+  max-width: 1100px;
+  margin: auto;
+}
+.back-arrow {
+  font-size: 1.5rem;
+  text-decoration: none;
+  color: #000;
+  margin-right: 0.75rem;
+}
+
+.header-title {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 2rem;
+  display: flex;
+  align-items: center;
+}
+
+.header-title i {
+  font-size: 1.5rem;
+  margin-right: 0.75rem;
+}
+
+.job-header {
+  background-color: #f0f8ff;
+  border-radius: 12px;
+  padding: 2rem;
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+.job-left, .job-center, .job-right {
+  flex: 1;
+  min-width: 250px;
+}
+
+.job-left h4 {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.job-left .badge {
+  font-size: 0.8rem;
+  padding: 0.4rem 0.7rem;
+}
+
+.job-left p {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.job-center p {
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
+}
+
+.job-right img {
+  width: 100%;
+  max-width: 160px;
+  border-radius: 10px;
+  display: block;
+  margin: 0 auto;
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px; /* Optional: Add rounded corners */
+}
+
+.job-right .btn {
+  margin-top: 10px; /* Add spacing between the image and the button */
+}
+
+.applicant-list {
+  margin-top: 1.5rem;
+}
+
+.applicant-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #f8f9fa;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  gap: 1rem;
+}
+
+.applicant-name {
+  flex: 1;
+  font-weight: 500;
+  font-size: 1rem;
+}
+
+.applicant-actions {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.applicant-actions a {
+  min-width: 120px;
+  text-align: center;
+}
+
+.applicant-status {
+  flex: 1;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.status-btn {
+  width: 150px;
+}
+
+
+.status-approved {
+  background-color: #28a745; /* Green */
+  color: white;
+}
+
+.status-pending {
+  background-color: #1d3557; /* Blue */
+  color: white;
+}
+
+.status-rejected {
+  background-color: #dc3545; /* Red */
+  color: white;
+}

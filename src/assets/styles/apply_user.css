@@ -1,0 +1,230 @@
+body {
+    font-family: 'Encode Sans', sans-serif;
+    background-image: url("/src/assets/Images/background1.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    padding: 30px;
+    margin: 0;
+}
+
+.back-button {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 24px;
+    color: #091F5B;
+    cursor: pointer;
+    background: none;
+    border: none;
+}
+
+
+/* ----- Navbar ----- */
+.navbar {
+    background: #f5f8fc;
+    border-radius: 40px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    max-width: 1000px;
+    margin: 0 auto 30px auto;
+    position: relative;
+}
+
+.nav-logo {
+    font-size: 20px;
+    font-weight: 700;
+    color: #000;
+}
+
+.nav-search {
+    display: flex;
+    align-items: center;
+    background: white;
+    border-radius: 30px;
+    padding: 8px 15px;
+    box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.1) inset;
+    flex-grow: 1;
+    /* ทำให้ search ขยายเต็มพื้นที่ */
+    max-width: 300px;
+    margin: 0 auto;
+}
+
+.nav-search input {
+    border: none;
+    outline: none;
+    width: 100%;
+    font-size: 14px;
+}
+
+.nav-search img {
+    width: 32px;
+    height: 32px;
+}
+
+.dropdown-btn {
+    background-color: #627BD8;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 16px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+    right: 20px;
+}
+
+.dropdown-btn:hover {
+    background-color: #3752d2;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: white;
+    min-width: 150px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    margin-top: 5px;
+    z-index: 10;
+}
+
+.dropdown-content a {
+    color: #959595;
+    padding: 10px 15px;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown-content a:hover {
+    background-color: #f0f0f0;
+}
+
+.nav-dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.nav-user img {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+
+/* ----- Job Card ------ */
+.job-card {
+    background: #D0E0F7;
+    border-radius: 10px;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.25);
+    width: 90%;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 500px;
+    position: relative;
+    /* ให้ .job-tags ติดขอบล่างได้ */
+    max-width: 1000px;
+    margin: 0 auto 30px auto;
+}
+
+.job-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px; /* Space between the image and job info */
+    width: 100%;
+}
+
+.job-image-container {
+    flex: 0 0 40%; /* Reserve 40% of the width for the image */
+    max-width: 400px; /* Optional: Set a maximum width */
+    height: auto; /* Allow height to adjust based on the image */
+}
+
+.job-image {
+    width: 100%; /* Make the image fill the container */
+    height: auto; /* Maintain the aspect ratio */
+    border-radius: 10px; /* Add rounded corners */
+    object-fit: cover; /* Ensure the image covers the container without distortion */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add a subtle shadow */
+    border: 2px solid #D0E0F7; /* Add a border for consistency */
+}
+
+.job-info {
+    flex: 1;
+    color: #091F5B;
+}
+
+.poster-name {
+    margin: 5px 0;
+    font-size: 16px;
+    color: #091F5B;
+    text-decoration: underline;
+}
+
+.detail {
+    font-size: 16px;
+    color: #091F5B;
+    margin: 3px 0;
+}
+
+hr {
+    /* เส้นคั่น  */
+    margin: 15px 0;
+    border: none;
+    border-top: 1px solid #091F5B;
+}
+
+.job-description {
+    font-size: 16px;
+    color: #959595;
+    margin-bottom: 15px;
+}
+
+.job-tags {
+    position: absolute;
+    bottom: 10px;
+    left: 20px;
+    right: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.tag {
+    background: white;
+    color: #4D4D4D;
+    padding: 5px 20px;
+    border-radius: 15px;
+    font-size: 14px;
+}
+
+.apply-button {
+    text-align: right;
+    margin-top: auto;
+}
+
+.apply-button button {
+    background-color: #627BD8;
+    color: white;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.3);
+    border: none;
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-size: 24px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.apply-button button:hover {
+    background-color: #3752d2;
+}

@@ -1,0 +1,488 @@
+html,
+body {
+  margin: 0;
+  padding: 0;
+  scroll-behavior: smooth;
+  height: 100%;
+  font-family: 'Encode Sans', sans-serif !important;
+  overflow-y: scroll;
+}
+body {
+  scroll-snap-type: y mandatory;
+  font-family: 'Encode Sans', sans-serif;
+
+}
+
+section {
+  scroll-snap-align: start;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding: 20px;
+}
+
+@font-face {
+  font-family: 'Encode Sans';
+  src: url('/src/assets/fonts/EncodeSans/EncodeSans-Regular.ttf') format('truetype'); /* เปลี่ยนชื่อไฟล์ตามที่คุณมี */
+  font-weight: 400; /* น้ำหนักปกติ */
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Encode Sans';
+  src: url('/src/assets/fonts/EncodeSans/EncodeSans-Bold.ttf') format('truetype'); /* เปลี่ยนชื่อไฟล์ตามที่คุณมี */
+  font-weight: 700; /* น้ำหนักตัวหนา */
+  font-style: normal;
+}
+
+.footer {
+  position: fixed;
+  /* ทำให้ footer อยู่ที่ตำแหน่งคงที่ */
+  bottom: 0;
+  /* ชิดขอบล่างของหน้า */
+  left: 0;
+  /* ชิดขอบซ้าย */
+  width: 100%;
+  /* ให้กว้างเต็มหน้าจอ */
+  background-color: #d9e5f7;
+  /* สีพื้นหลัง */
+  text-align: center;
+  /* จัดข้อความให้อยู่ตรงกลาง */
+  padding: 10px 0;
+  /* เพิ่มระยะห่างด้านบนและล่าง */
+  font-size: 0.9rem;
+  /* ขนาดตัวอักษร */
+  color: #555;
+  /* สีข้อความ */
+}
+
+.hero {
+  background: url("/src/assets/Images/Wireframe - 1.png") no-repeat center center;
+  background-size: cover;
+  color: black;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
+}
+
+.hero-container {
+  display: flex;
+  align-items: center;
+  gap: 60px;
+  max-width: 1200px;
+  width: 100%;
+  justify-content: center;
+  position: relative;
+  /* กำหนดตำแหน่งให้ container */
+}
+
+.hero-image img {
+  position: absolute;
+  /* ใช้ absolute เพื่อจัดตำแหน่ง */
+  top: 50%;
+  /* เลื่อนลงมาตรงกลางในแนวตั้ง */
+  left: 16%;
+  /* ขยับไปทางซ้าย */
+  transform: translate(-50%, -50%);
+  /* จัดให้อยู่ตรงกลางของตำแหน่งที่กำหนด */
+  width: 260px;
+  height: 260px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 5px solid #000000;
+}
+
+.hero-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  max-width: 500px;
+  margin-left: 150px;
+  /* ขยับข้อความไปทางขวา */
+}
+
+.greeting {
+  font-size: 80px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  line-height: 1.2;
+  text-align: left;
+  /* จัดข้อความไปทางซ้าย */
+}
+
+.hero-text p {
+  font-size: 40px;
+  font-weight: normal;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  max-width: 600px;
+  margin-left: 0;
+  /* เพิ่มระยะห่างจากด้านซ้าย */
+  white-space: nowrap;
+  /* บังคับข้อความไม่ให้ขึ้นบรรทัดใหม่ */
+}
+
+
+.background-container {
+  /* สร้าง container สำหรับ background */
+  position: absolute;
+  width: 550px;
+  height: 977px;
+  left: -78px;
+  top: -531.74px;
+  background-repeat: no-repeat;
+  /* ป้องกันการแสดงภาพพื้นหลังซ้ำ */
+  transform: rotate(-9.97deg);
+  z-index: -1;
+  /* จัดให้ background อยู่ข้างหลัง */
+}
+
+.section1 {
+  background-color: #ffffff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 0;
+}
+
+.section2 {
+  background-image: url("/src/assets/Images/BG - Home Page.png");
+  /* ใช้ background-image แทน background: url(...) */
+}
+
+h1 {
+  font-size: 2.5rem;
+  margin-bottom: 0.5em; 
+}
+
+.box-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  width: 100%;
+  max-width: 900px;
+}
+
+.box {
+  background-color: #a49d9d;
+  border-radius: 12px;
+  padding: 30px;
+  text-align: center;
+}
+
+.topbar {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  max-width: 1400px;
+  background-color: #F0F5FC;
+  border-radius: 90px;
+  padding: 20px 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: auto;
+  z-index: 1000;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.logo {
+  font-size: 40px;
+  font-weight: 700;
+  font-family: 'Carlito', sans-serif;
+  color: black;
+}
+
+.search-box {
+  flex: 2 1 300px;
+  /*width: 500px;*/
+  height: 40px;
+  border-radius: 52px;
+  border: none;
+  padding: 0 20px;
+  font-size: 16px;
+  margin: 10px;
+  min-width: 150px;
+  /* ปรับ min-width */
+  flex-grow: 1;
+  /* เพิ่ม flex-grow */
+}
+
+.auth-buttons {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  /*flex-wrap: wrap;*/
+}
+
+.signup,
+.login {
+  font-size: 20px;
+  font-weight: 600;
+  padding: 6px 16px;
+  border: none;
+  cursor: pointer;
+}
+
+.signup {
+  color: #665F5F;
+  background: none;
+  text-decoration: underline;
+}
+
+.login {
+  background-color: #627BD8;
+  color: white;
+  border-radius: 30px;
+  border: none;
+  height: 30px;
+}
+
+.icon {
+  width: 50px; /* Set a fixed width */
+  height: 50px; /* Set a fixed height */
+  border-radius: 50%; /* Make it circular */
+  overflow: hidden; /* Ensure the image doesn't overflow */
+  display: flex; /* Center the image */
+  align-items: center; /* Center the image vertically */
+  justify-content: center; /* Center the image horizontally */
+  background-color: #f0f0f0; /* Optional: Add a background color */
+  cursor: pointer; /* Change cursor to pointer on hover */
+
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+#icon-image {
+  width: 100%; /* Make the image fill the container */
+  height: 100%; /* Make the image fill the container */
+  object-fit: cover; /* Ensure the image covers the container */
+}
+
+.buttons {
+  text-align: center;
+  margin-top: 30px;
+}
+
+.buttons button {
+  margin: 0 10px;
+  padding: 10px 15px;
+  font-size: 16px;
+}
+
+.career-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  max-width: 1200px;
+  margin: auto;
+  padding: 40px 16px;
+  grid-auto-flow: dense;
+  /* <------ สำคัญตรงนี้ */
+}
+
+
+.grid-item {
+  background-color: #ccc;
+  border-radius: 12px;
+  font-weight: bold;
+  text-align: center;
+  color: #333;
+  text-decoration: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  aspect-ratio: 1 / 1;
+  transition: background 0.3s, transform 0.2s;
+  font-size: 1.2rem;
+  padding: 20px;
+}
+
+.grid-item:hover {
+  background-color: #bbb;
+  transform: translateY(-2px);
+}
+
+/* งานยอดนิยมกิน 2 คอลัมน์บนจอใหญ่ */
+.featured {
+  background-color: #aaa;
+}
+
+@media (min-width: 1024px) {
+  .featured {
+    grid-column: span 2;
+    grid-row: span 2;
+    aspect-ratio: auto;
+    /* ปล่อยอัตราส่วนให้ปรับเอง */
+    grid-row: 1.4rem;
+    padding: 40px;
+  }
+}
+
+/* สำหรับจอเล็ก: กลับมาเท่ากับกล่องอื่น */
+@media (max-width: 1023px) {
+  .featured {
+    grid-column: span 1;
+  }
+}
+
+.placeholder {
+  visibility: hidden;
+}
+
+@media screen and (max-width: 768px) {
+  .search-box {
+    font-size: 14px;
+    /* ลดขนาด font ใน search box */
+  }
+
+  .topbar {
+    padding: 10px 20px;
+    /* ลด padding ของ topbar */
+    gap: 10px;
+    /* ลด gap ระหว่าง items ใน topbar */
+  }
+
+  .logo {
+    font-size: 32px;
+    /* ลดขนาด logo ถ้าจำเป็น */
+  }
+
+  .signup,
+  .login {
+    font-size: 16px;
+    /* ลดขนาด font ของปุ่มถ้าจำเป็น */
+    padding: 4px 12px;
+  }
+}
+
+.stats-section {
+  background-color: #ffffff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 60px 20px;
+}
+
+.stats-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  justify-content: center;
+  max-width: 1000px;
+  width: 100%;
+}
+
+.stats-box {
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 30px;
+  text-align: center;
+  flex: 1 1 280px;
+}
+
+.stats-title {
+  color: #3366cc;
+  font-size: 1.1rem;
+  margin-bottom: 16px;
+}
+
+.stats-number {
+  font-size: 64px;
+  color: #001f4d;
+  font-weight: bold;
+}
+
+.stats-unit {
+  font-size: 1rem;
+  color: #3366cc;
+  margin-top: 8px;
+}
+
+/* Dropdown สไตล์ตามภาพ */
+.dropdown {
+  position: relative;
+  display: inline-block;
+  font-family: 'Encode Sans', sans-serif;
+}
+
+.dropbtn {
+  background-color: #5B75F9;
+  color: white;
+  padding: 12px 20px;
+  font-size: 18px;
+  font-weight: bold;
+  border: none;
+  border-radius: 20px 20px 20px 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dropbtn .arrow {
+  font-size: 14px;
+  margin-top: 2px;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #ffffff;
+  min-width: 160px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+  z-index: 1;
+  border-radius: 12px 12px 12px 12px;
+  overflow: hidden;
+  margin-top: 0px;
+}
+
+.dropdown-content a {
+  color: #555;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  font-size: 16px;
+  border-top: 1px solid #eee;
+}
+
+.dropdown-content a:first-child {
+  border-top: none;
+}
+
+.dropdown-content a:hover {
+  background-color: #f0f0f0;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+/* Center the button and ensure it's visible */
+div[style*="text-align: center; margin: 40px 0;"] {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 40px auto; /* Center the button horizontally */
+  width: 100%; /* Ensure it spans the container */
+}
+
+button {
+  padding: 10px 20px;
+  font-size: 1rem;
+  background-color: #665F5F;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  max-width: 300px; /* Optional: Limit the button width */
+}
